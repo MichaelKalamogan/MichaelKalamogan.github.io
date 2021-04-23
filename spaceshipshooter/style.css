@@ -1,0 +1,30 @@
+#game-window {
+    border: 1px solid black;
+    width: 800px;
+    height: 800px;
+    background-image: url('outer-space.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+#shooter {
+    height: 50px;
+    width: 60px;
+    position: relative;
+    top: 740px;
+    left: 370px;
+}
+
+#shooter img {
+    width: 100%;
+    height: 100%
+}
+
+.bullet {
+    height: 10px;
+    width: 7px;
+    background-color: red;
+    position: absolute;
+}
+
