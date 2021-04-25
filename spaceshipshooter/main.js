@@ -4,6 +4,7 @@ window.onload = () => {
     let playerLife = 3;
     let enemyMovementSpeed = 5;
     let createEnemySpeed = 200;
+    var playerScore = 0;
 
     //Creating arrays to hold the Bullets and Enemies tht will be created
     var bullets = [];
@@ -97,10 +98,10 @@ window.onload = () => {
     function shoot() {
         clearInterval(bulletInterval)
         let bullet = document.createElement('div');
-        bullet.setAttribute('class', 'bullet');
-        bullets.push(bullet);
+        bullet.setAttribute('class', 'bullet');      
         bullet.style.top = shooterTopPos + 'px';
         bullet.style.left = shooterLeftPos + 36 + 'px';
+        bullets.push(bullet);
         document.getElementById('game-window').append(bullet);
         bulletInterval = setInterval(movebullets,200);
     }
@@ -109,8 +110,12 @@ window.onload = () => {
         for (let i = 0 ; i < bullets.length; i++ ) {
             if (parseInt(bullets[i].style.top) <= 10) {
                 bullets[i].remove();
+                bullets.splice(i,1);
+                console.log(bullets)
             } else {
                bullets[i].style.top = parseInt(bullets[i].style.top) - 5 + 'px';
+               console.log('bullet left: ' + bullets[i].style.left)
+               console.log('bullet top: ' + bullets[i].style.top)
             }
         }
     }
@@ -128,7 +133,7 @@ window.onload = () => {
 
         //Creating the enemy to appear randomly
         newEnemy.style.top = Math.floor(Math.random() * (800 - 200) + 50) + 'px';
-        newEnemy.style.left = Math.floor(Math.random() * (800) + 50) + 'px';
+        newEnemy.style.left = Math.floor(Math.random() * (800)) + 'px';
         let newEnemyTopPosition = newEnemy.style.top;
         let newEnemyLeftPosition = newEnemy.style.left;
 
@@ -157,12 +162,36 @@ window.onload = () => {
 
             } else {
                enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
+               console.log('enemy Top: ' + enemies[i].style.top)
+               console.log('enemy Left: ' + enemies[i].style.left)
             }
         }
+
+        killEnemy();
     }
 
 /*---------------------------------------------------------------------------------------------*/
 
+    //function to remove the bullet and enemy
+
+    function killEnemy () {
+        for(let i = 0; i < enemies.length; i++) {
+            for(let j = 0; j < bullets.length; j++) {
+
+                if((parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left)) <= 8 &&
+                    parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left) >= -30) {
+
+                    if(parseInt(enemies[i].style.top) - parseInt(bullets[j].style.top) >= -30 ){
+                        enemies[i].remove();
+                        bullets[j].remove();
+                        enemies.splice(i,1);
+                        bullets.splice(j,1);
+                        playerScore += 1;  
+                    }
+                }
+            }
+        }
+    }
 
 
 }
