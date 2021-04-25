@@ -28,3 +28,10 @@
     position: absolute;
 }
 
+.enemy {
+    height: 30px;
+    width: 30px;
+    background-color: white;
+    position: absolute;
+}
+
