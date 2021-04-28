@@ -2,7 +2,7 @@ window.onload = () => {
 
     //creating the gaem variables
     let playerLife = 3;
-    let enemyMovementSpeed = 5;
+    let enemyMovementSpeed = 1;
     let createEnemySpeed = 200;
     var playerScore = 0;
 
@@ -18,92 +18,63 @@ window.onload = () => {
     let shooter = document.getElementById('shooter');
     shooterTopPos = 740;
     shooterLeftPos = 370;
+    
+    let keysPressed = [];
 
-    // Moving the Shooter
-    let keysPressed = {};
-
+    // listening to the keys being pressed or released
     document.addEventListener("keydown",e => {
-
-        keysPressed[e.key] = true;    
-
-        if (keysPressed['ArrowRight'] && keysPressed[' ']) {
-            if(shooterLeftPos >= 740) {
-                return
-            } else {
-                shooterLeftPos += 5;
-                console.log(shooterLeftPos)
-                shooter.style.left = shooterLeftPos + 'px';
-                shoot();
-            }
-        } else if (keysPressed['ArrowLeft'] && keysPressed[' ']) {
-            if(shooterLeftPos <= 0) {
-                return
-            } else {
-                shooterLeftPos -= 5;
-                console.log(shooterLeftPos)
-                shooter.style.left = shooterLeftPos + 'px';
-                shoot();
-            }
-        } else if(keysPressed['ArrowLeft']) {
-            if(shooterLeftPos <= 0) {
-                return
-            } else {
-                shooterLeftPos -= 5;
-                console.log(shooterLeftPos)
-                shooter.style.left = shooterLeftPos + 'px';
-            }
-        } else if (keysPressed['ArrowRight']) {
-            if(shooterLeftPos >= 740) {
-                return
-            } else {
-                shooterLeftPos += 5;
-                console.log(shooterLeftPos)
-                shooter.style.left = shooterLeftPos + 'px';
-            }
-        } else if (keysPressed[' ']) {
-            shoot()
-            console.log('shoot')
-        } else if (keysPressed['g']) {
-            createEnemy();
-        }
+        keysPressed[e.key] = true;
     });
 
     document.addEventListener("keyup", e => {
+        keysPressed[e.key] = false;
+        if (e.key === " ") {
+            shoot()
+        } 
+    })
 
-       delete keysPressed[e.key];
-       if(keysPressed['ArrowLeft']) {
-           if(shooterLeftPos <= 0) {return
-            } else {
-                shooterLeftPos -= 5;
-                console.log(shooterLeftPos)
-                shooter.style.left = shooterLeftPos + 'px';
-            }
+    function move () {
 
-        } else if (keysPressed['ArrowRight']) {
-            if(shooterLeftPos >= 740) {
-                return
-            } else {
+        if(keysPressed['ArrowLeft'] && shooterLeftPos > 0) {
+            shooterLeftPos -= 5;
+            console.log(shooterLeftPos)
+            shooter.style.left = shooterLeftPos + 'px';
+            
+        } else if (keysPressed['ArrowRight'] && shooterLeftPos < 740) {
             shooterLeftPos += 5;
             console.log(shooterLeftPos)
             shooter.style.left = shooterLeftPos + 'px';
-            }
-        } 
-    })
+ 
+        }         
+        if (keysPressed['g']) {
+            createEnemy();
+        }
+
+        requestAnimationFrame(move)
+    }
+
+    requestAnimationFrame(move)
 
 
 /*---------------------------------------------------------------------------------------------*/
     //Creating the bullets and moving them
     let bulletInterval = null
+    let reLoad = true
 
     function shoot() {
-        clearInterval(bulletInterval)
-        let bullet = document.createElement('div');
-        bullet.setAttribute('class', 'bullet');      
-        bullet.style.top = shooterTopPos + 'px';
-        bullet.style.left = shooterLeftPos + 36 + 'px';
-        bullets.push(bullet);
-        document.getElementById('game-window').append(bullet);
-        bulletInterval = setInterval(movebullets,200);
+          if (reLoad) {
+            reLoad = false;
+            let bullet = document.createElement('div');
+            bullet.setAttribute('class', 'bullet');      
+            bullet.style.top = shooterTopPos + 'px';
+            bullet.style.left = shooterLeftPos + 30 + 'px';
+            bullets.push(bullet);
+            document.getElementById('game-window').append(bullet);
+        }
+
+        setTimeout( () => {
+            reLoad = true
+        }, 1000)
     }
 
     let movebullets = () => {
@@ -111,47 +82,80 @@ window.onload = () => {
             if (parseInt(bullets[i].style.top) <= 10) {
                 bullets[i].remove();
                 bullets.splice(i,1);
-                console.log(bullets)
+
             } else {
-               bullets[i].style.top = parseInt(bullets[i].style.top) - 5 + 'px';
-               console.log('bullet left: ' + bullets[i].style.left)
-               console.log('bullet top: ' + bullets[i].style.top)
+               bullets[i].style.top = parseInt(bullets[i].style.top) - 2 + 'px';
             }
         }
+
+        requestAnimationFrame(movebullets)
     }
+
+    requestAnimationFrame(movebullets)
 
 /*---------------------------------------------------------------------------------------------*/
 
     //Creating the Enemies and moving them
-    let enemyInterval = null;
 
     function createEnemy() {
-        clearInterval(enemyInterval);
-        let newEnemy =  document.createElement('div');
+        let newEnemy =  document.createElement('img');
+        newEnemy.setAttribute('src', 'enemy.png');
         newEnemy.setAttribute('class', 'enemy');
-        enemies.push(newEnemy);
+       
 
         //Creating the enemy to appear randomly
-        newEnemy.style.top = Math.floor(Math.random() * (800 - 200) + 50) + 'px';
-        newEnemy.style.left = Math.floor(Math.random() * (800)) + 'px';
+        newEnemy.style.top = Math.floor(Math.random() * (800 - 400) + 50) + 'px';
+        newEnemy.style.left = setEnemyLeft() + 'px';
+
+        function setEnemyLeft () {
+
+            let position = Math.floor(Math.random() * (800));
+            if (position > 750) {
+                return 750;
+            } else {
+                return position;
+            }
+        }
+        
         let newEnemyTopPosition = newEnemy.style.top;
         let newEnemyLeftPosition = newEnemy.style.left;
 
 
-        //Checking if there is already an enemey at the same position
-        if(enemies.some(element => 
-            {return element.style.top === newEnemyTopPosition}) 
-            && enemies.some(element => {element.style.left === newEnemyLeftPosition}))
+        //Checking if there is already an enemy at the same position 
+        let enemyCheck = true;
+
+        if (enemies.length > 1) {
             
-        {   
-            enemies.pop(newEnemy);
-            
-        } else {
-            document.getElementById('game-window').append(newEnemy)
+            for (let i = 0; i < enemies.length; i++) {
+
+                if (parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) < 50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) >= 0) {
+                    enemyCheck = false;
+                    
+                } else if ( parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) > -50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) <= 0) {
+                    enemyCheck = false;
+                    
+                } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) < 60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) >= 0) {
+                    enemyCheck = false;
+                    
+                } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) > -60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) <= 0) {
+                    enemyCheck = false;
+                    
+                } else {
+                    enemyCheck = true;
+                }
+            }   
         }
 
-        enemyInterval = setInterval(moveEnemies, createEnemySpeed)
+        if (enemyCheck === true) {
+            enemies.push(newEnemy);
+            document.getElementById('game-window').append(newEnemy)
+        } else {
+            
+            newEnemy.remove()
+        }
     }
+
+    //setInterval(createEnemy,1000)
 
     //Moving the Enemies
     let moveEnemies = () => {
@@ -162,13 +166,13 @@ window.onload = () => {
 
             } else {
                enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
-               console.log('enemy Top: ' + enemies[i].style.top)
-               console.log('enemy Left: ' + enemies[i].style.left)
             }
         }
-
-        killEnemy();
+    
+    requestAnimationFrame(moveEnemies);
     }
+
+    //requestAnimationFrame(moveEnemies);
 
 /*---------------------------------------------------------------------------------------------*/
 
@@ -179,9 +183,9 @@ window.onload = () => {
             for(let j = 0; j < bullets.length; j++) {
 
                 if((parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left)) <= 8 &&
-                    parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left) >= -30) {
+                    parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left) >= -60) {
 
-                    if(parseInt(enemies[i].style.top) - parseInt(bullets[j].style.top) >= -30 ){
+                    if(parseInt(enemies[i].style.top) - parseInt(bullets[j].style.top) >= -50 ){
                         enemies[i].remove();
                         bullets[j].remove();
                         enemies.splice(i,1);
@@ -193,13 +197,16 @@ window.onload = () => {
         }
     }
 
+    setInterval(killEnemy,20)
 
+/*---------------------------------------------------------------------------------------------*/
+    //Game end Criteria
+
+    
 }
 
+
 // Things to work on
-// shooter movement after shooting
-// enemies appearing on top of each other due to size.
-// Image for the Enemies
-// removing Enemies when shot
+// Image for the Enemies when shot
 //Game end Criteria
 //Game win Criteria
