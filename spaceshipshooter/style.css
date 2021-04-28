@@ -9,7 +9,7 @@ body{
     border: 1px solid black;
     width: 800px;
     height: 800px;
-    /* background-image: url('outer-space.jpeg'); */
+    background-image: url('outer-space.jpeg'); 
     background-repeat: no-repeat;
     background-size: cover;
 
