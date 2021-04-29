@@ -2,19 +2,20 @@
 
 body{
     display: flex;
-    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #game-window {
     border: 1px solid black;
-    width: 800px;
-    height: 800px;
+    width: 70vw;
+    height: 85vh;
     background-image: url('outer-space.jpeg'); 
     background-repeat: no-repeat;
     background-size: cover;
 
 }
-
 
 .game-button {
     position: relative;
@@ -68,7 +69,7 @@ body{
     border-bottom: 3px solid rgba(205, 102, 0, 0.5);
     text-shadow: 2px 2px 1px #e78700, -2px 2px 1px #e78700, 2px -2px 1px #e78700, -2px -2px 1px #e78700, 0px 2px 1px #e78700, 0px -2px 1px #e78700, 0px 4px 1px #c96100, 2px 4px 1px #c96100, -2px 4px 1px  #c96100;
   }
-  .game-button.orange:hover {
+  .game-button.orange:active {
     top:2px;
     box-shadow: 0 4px 0 #b76113, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #75421f, 0 10px 0 5px #8a542b, 0 13px 0 5px #593116, 0 13px 1px 6px rgba(0,0,0,.3);
   }
@@ -79,7 +80,7 @@ body{
     border-bottom: 3px solid rgba(160, 25, 23, 0.5);
     text-shadow: 2px 2px 1px #d72d21, -2px 2px 1px #d72d21, 2px -2px 1px #d72d21, -2px -2px 1px #d72d21, 0px 2px 1px #d72d21, 0px -2px 1px #d72d21, 0px 4px 1px #930704, 2px 4px 1px #930704, -2px 4px 1px  #930704;
   }
-  .game-button.red:hover {
+  .game-button.red:active {
     top:2px;
     box-shadow: 0 4px 0 #ae2725, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #831614, 0 10px 0 5px #a33634, 0 13px 0 5px #631716, 0 13px 1px 6px rgba(0,0,0,.3);
   }
@@ -90,7 +91,7 @@ body{
     border-bottom: 3px solid rgba(40, 117, 29, 0.5);
     text-shadow: 2px 2px 1px #348628, -2px 2px 1px #348628, 2px -2px 1px #348628, -2px -2px 1px #348628, 0px 2px 1px #348628, 0px -2px 1px #348628, 0px 4px 1px #1d4c16, 2px 4px 1px #1d4c16, -2px 4px 1px #1d4c16;
   }
-  .game-button.green:hover {
+  .game-button.green:active {
     top:2px;
     box-shadow: 0 4px 0 #348628, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #2a6d20, 0 10px 0 5px #39822e, 0 13px 0 5px #1d4c16, 0 13px 1px 6px rgba(0,0,0,.3);
   }
@@ -104,8 +105,6 @@ body{
     height: 50px;
     width: 60px;
     position: relative;
-    top: 740px;
-    left: 370px;
 }
 
 #shooter img {
@@ -129,5 +128,25 @@ body{
 #score {
     text-align: center;
     text-decoration: underline;
+}
+
+#ending-msg {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(119, 136, 153, 0.9);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+}
+
+#ending-msg p {
+  margin: 20px;
+  font-size: 50px;
+  font-weight: 900;
 }
 

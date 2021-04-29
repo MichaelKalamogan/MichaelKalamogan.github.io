@@ -1,14 +1,115 @@
 window.onload = () => {
 
     //creating the gaem variables
-    let playerLife = 3;
+    var playerLife = 3;
     let enemyMovementSpeed = 1;
-    let createEnemySpeed = 200;
+
     var playerScore = 0;
+    let gameWindow = document.getElementById('game-window')
+   
+    //setting initial position of shooter
+    let shooterPlayer = document.getElementById('shooter')
+    let shooterPlayerHeight = shooterPlayer.clientHeight;
+    shooterTopPos = gameWindow.offsetHeight - parseInt(shooterPlayerHeight) - 10
+    shooterPlayer.style.top = shooterTopPos + 'px'
+    
+    
+    shooterLeftPos = (gameWindow.clientWidth)/2 
+    shooterPlayer.style.left = shooterLeftPos + 'px'
 
     //Creating arrays to hold the Bullets and Enemies tht will be created
     var bullets = [];
     var enemies = [];
+
+/*---------------------------------------------------------------------------------------------*/
+    //Choosing the difficulty
+    
+    let startButton = document.getElementById('start-game');
+    let easyButton = document.getElementById('easy');
+    let mediumButton = document.getElementById('medium');
+    let hardButton = document.getElementById('hard');
+    let score = document.getElementById('score-and-life');
+
+    startButton.addEventListener('click', () => {
+        startButton.style.display = 'none';
+        easyButton.style.display = 'flex'
+        mediumButton.style.display = 'flex'
+        hardButton.style.display = 'flex';
+
+    })
+
+
+    //Starting Game based on difficulty
+
+    easyButton.addEventListener('click', () => {
+
+        easyButton.style.display = 'none';
+        mediumButton.style.display = 'none';
+        hardButton.style.display = 'none';
+        score.style.display = 'flex';
+
+        //starting game
+        startGame();
+        
+    })
+
+    mediumButton.addEventListener('click', () =>{
+        easyButton.style.display = 'none'
+        mediumButton.style.display = 'none'
+        hardButton.style.display = 'none'
+        score.style.display = 'flex'
+
+        //changing the enemy's speed
+        enemyMovementSpeed = 2;
+
+        //start the game
+        startGame();
+    })
+
+    hardButton.addEventListener('click', () =>{
+        easyButton.style.display = 'none';
+        mediumButton.style.display = 'none';
+        hardButton.style.display = 'none';
+        score.style.display = 'flex';
+
+        //changing the enemy's speed
+        enemyMovementSpeed = 3;
+
+        //starting the game
+        startGame();
+    })
+
+
+    // Functions to run when game has started
+
+    function startGame() {
+
+        //making everything move once player chooses the level
+        let enemyCreation = setInterval(createEnemy, 1500);
+        let clearEnemies = setInterval (killEnemy, 200)
+                
+//        console.log(enemyMove)
+
+        let livesLeft = setInterval ( () => {
+            let shooterMove = requestAnimationFrame(move);
+            let enemyMove = requestAnimationFrame(moveEnemies)
+            let bulletMove = requestAnimationFrame(movebullets);
+
+            if (playerLife <= 0) {
+                endGame();
+                window.cancelAnimationFrame(shooterMove);
+                cancelAnimationFrame(bulletMove);
+                console.log(enemyMove)
+                cancelAnimationFrame(enemyMove);
+
+                
+                clearInterval(enemyCreation)
+                clearInterval(clearEnemies)
+                clearInterval(livesLeft)
+            }
+        },17);
+    }
+
 
 
 /*---------------------------------------------------------------------------------------------*/
@@ -24,6 +125,7 @@ window.onload = () => {
     // listening to the keys being pressed or released
     document.addEventListener("keydown",e => {
         keysPressed[e.key] = true;
+
     });
 
     document.addEventListener("keyup", e => {
@@ -36,45 +138,30 @@ window.onload = () => {
     function move () {
 
         if(keysPressed['ArrowLeft'] && shooterLeftPos > 0) {
-            shooterLeftPos -= 5;
-            console.log(shooterLeftPos)
+            shooterLeftPos -= 5;    
             shooter.style.left = shooterLeftPos + 'px';
             
         } else if (keysPressed['ArrowRight'] && shooterLeftPos < 740) {
             shooterLeftPos += 5;
-            console.log(shooterLeftPos)
             shooter.style.left = shooterLeftPos + 'px';
  
-        }         
-        if (keysPressed['g']) {
-            createEnemy();
-        }
-
-        requestAnimationFrame(move)
+        } 
     }
 
-    requestAnimationFrame(move)
+    
 
 
 /*---------------------------------------------------------------------------------------------*/
     //Creating the bullets and moving them
-    let bulletInterval = null
-    let reLoad = true
 
     function shoot() {
-          if (reLoad) {
-            reLoad = false;
+
             let bullet = document.createElement('div');
             bullet.setAttribute('class', 'bullet');      
             bullet.style.top = shooterTopPos + 'px';
-            bullet.style.left = shooterLeftPos + 30 + 'px';
+            bullet.style.left = shooterLeftPos + 20 + 'px';
             bullets.push(bullet);
             document.getElementById('game-window').append(bullet);
-        }
-
-        setTimeout( () => {
-            reLoad = true
-        }, 1000)
     }
 
     let movebullets = () => {
@@ -87,11 +174,9 @@ window.onload = () => {
                bullets[i].style.top = parseInt(bullets[i].style.top) - 2 + 'px';
             }
         }
-
-        requestAnimationFrame(movebullets)
     }
 
-    requestAnimationFrame(movebullets)
+    
 
 /*---------------------------------------------------------------------------------------------*/
 
@@ -149,31 +234,41 @@ window.onload = () => {
         if (enemyCheck === true) {
             enemies.push(newEnemy);
             document.getElementById('game-window').append(newEnemy)
+
         } else {
-            
             newEnemy.remove()
         }
+
     }
 
-    //setInterval(createEnemy,1000)
-
-    //Moving the Enemies
+    //Moving the Enemies and reducing playerLife when enemy escapes
     let moveEnemies = () => {
+        //console.log('moving enemies');
         for (let i = 0 ; i < enemies.length; i++ ) {
+
             if (parseInt(enemies[i].style.top) >= 760) {
                 enemies[i].remove();
-                playerLife -= 1
-
+                enemies.splice(i,1)
+                playerLife -= 1;
+            
+            } else if ( (parseInt(shooterTopPos) - parseInt(enemies[i].style.top)) <= 40 ) {
+               
+                if ( (parseInt(enemies[i].style.left) - parseInt(shooterLeftPos)) <= 60  && 
+                    (parseInt(enemies[i].style.left) - parseInt(shooterLeftPos))  >= -60 ) {
+                    enemies[i].remove();
+                    enemies.splice(i,1);
+                    playerLife -= 1;
+                    shooterTopPos = 740;
+                    shooterLeftPos = 370;
+                } else {
+                    enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
+                }
             } else {
-               enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
+                enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
             }
-        }
-    
-    requestAnimationFrame(moveEnemies);
+
+        }    
     }
-
-    //requestAnimationFrame(moveEnemies);
-
 /*---------------------------------------------------------------------------------------------*/
 
     //function to remove the bullet and enemy
@@ -197,16 +292,52 @@ window.onload = () => {
         }
     }
 
-    setInterval(killEnemy,20)
+
 
 /*---------------------------------------------------------------------------------------------*/
     //Game end Criteria
 
+    function endGame() {
+
+            let notification = document.createElement('p');
+            notification.innerText = 'Game Over';
+            document.getElementById('ending-msg').prepend(notification);
+            document.getElementById('ending-msg').style.display = 'flex';
+            document.getElementById('ending-msg').style.flexDirection = 'column';
+    }
     
+    // To reset Game
+    let reset = document.getElementById('reset-btn');
+
+    reset.addEventListener('click', () => {
+
+        let endingMsg = document.querySelector('#ending-msg');
+        endingMsg.querySelector('p').remove();
+        endingMsg.style.display = 'none';
+
+        // Amending to look like at the start
+        let bulletsLeft = document.querySelectorAll('.bullet');
+        bulletsLeft.forEach( e => e.remove());
+
+        let enemiesLeft = document.querySelectorAll('.enemy');
+        enemiesLeft.forEach( e => e.remove());
+
+        startButton.style.display = 'flex';
+        score.style.display = 'none';
+        playerLife = 3;
+        enemyMovementSpeed = 1;
+        bullets = [];
+        enemies = [];
+
+
+    })
+
 }
+
+
 
 
 // Things to work on
 // Image for the Enemies when shot
-//Game end Criteria
-//Game win Criteria
+// Game end Criteria -- dies when one enemy goes thru instead of 3
+// Things go WAYYY faster when i reset and do again (not refresh browser)
