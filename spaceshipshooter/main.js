@@ -1,5 +1,7 @@
 window.onload = () => {
 
+
+
     //creating the gaem variables
     var playerLife = 3;
     let enemyMovementSpeed = 1;
@@ -10,12 +12,13 @@ window.onload = () => {
     //setting initial position of shooter
     let shooterPlayer = document.getElementById('shooter')
     let shooterPlayerHeight = shooterPlayer.clientHeight;
-    shooterTopPos = gameWindow.offsetHeight - parseInt(shooterPlayerHeight) - 10
-    shooterPlayer.style.top = shooterTopPos + 'px'
     
-    
-    shooterLeftPos = (gameWindow.clientWidth)/2 
-    shooterPlayer.style.left = shooterLeftPos + 'px'
+
+    shooterPlayer.style.top = gameWindow.clientHeight - 50 + 'px'
+    let shooterTopPos = parseInt(shooterPlayer.style.top)
+  
+    shooterPlayer.style.left = (gameWindow.clientWidth)/2 + 'px'
+    let shooterLeftPos =  parseInt(shooterPlayer.style.left)
 
     //Creating arrays to hold the Bullets and Enemies tht will be created
     var bullets = [];
@@ -97,13 +100,12 @@ window.onload = () => {
 
             if (playerLife <= 0) {
                 endGame();
-                window.cancelAnimationFrame(shooterMove);
+                cancelAnimationFrame(shooterMove);
                 cancelAnimationFrame(bulletMove);
-                console.log(enemyMove)
                 cancelAnimationFrame(enemyMove);
 
                 
-                clearInterval(enemyCreation)
+               clearInterval(enemyCreation)
                 clearInterval(clearEnemies)
                 clearInterval(livesLeft)
             }
@@ -113,12 +115,7 @@ window.onload = () => {
 
 
 /*---------------------------------------------------------------------------------------------*/
-    //Creating the shooter and moving it
-
-    //Setting the Shooter attributes  
-    let shooter = document.getElementById('shooter');
-    shooterTopPos = 740;
-    shooterLeftPos = 370;
+    //Moving the Shooter
     
     let keysPressed = [];
 
@@ -137,13 +134,13 @@ window.onload = () => {
 
     function move () {
 
-        if(keysPressed['ArrowLeft'] && shooterLeftPos > 0) {
+        if(keysPressed['ArrowLeft'] && shooterLeftPos >= 0) {
             shooterLeftPos -= 5;    
-            shooter.style.left = shooterLeftPos + 'px';
+            shooterPlayer.style.left = shooterLeftPos + 'px';
             
-        } else if (keysPressed['ArrowRight'] && shooterLeftPos < 740) {
+        } else if (keysPressed['ArrowRight'] && (shooterLeftPos + 60 <= gameWindow.clientWidth)) {
             shooterLeftPos += 5;
-            shooter.style.left = shooterLeftPos + 'px';
+            shooterPlayer.style.left = shooterLeftPos + 'px';
  
         } 
     }
@@ -154,12 +151,25 @@ window.onload = () => {
 /*---------------------------------------------------------------------------------------------*/
     //Creating the bullets and moving them
 
+    
+    
     function shoot() {
 
             let bullet = document.createElement('div');
-            bullet.setAttribute('class', 'bullet');      
+            bullet.setAttribute('id', 'bullet');
+            
             bullet.style.top = shooterTopPos + 'px';
             bullet.style.left = shooterLeftPos + 20 + 'px';
+            let bulletImage = document.createElement('img');
+            bulletImage.src = 'bullet.png';
+        
+            bullet.appendChild(bulletImage);            
+
+            let bulletSound = document.getElementById('bullet-sound')
+            bulletSound.play();
+           
+      
+            
             bullets.push(bullet);
             document.getElementById('game-window').append(bullet);
     }
@@ -188,15 +198,15 @@ window.onload = () => {
         newEnemy.setAttribute('class', 'enemy');
        
 
-        //Creating the enemy to appear randomly
-        newEnemy.style.top = Math.floor(Math.random() * (800 - 400) + 50) + 'px';
+        //Creating the enemy to appear randomly and ensuring it stays within the window
+        newEnemy.style.top = Math.floor(Math.random() * (gameWindow.clientHeight/ 2)) + 'px';
         newEnemy.style.left = setEnemyLeft() + 'px';
 
         function setEnemyLeft () {
 
-            let position = Math.floor(Math.random() * (800));
-            if (position > 750) {
-                return 750;
+            let position = Math.floor(Math.random() * (gameWindow.clientWidth));
+            if (position >= gameWindow.clientWidth) {
+                return gameWindow.clientWidth - 60;
             } else {
                 return position;
             }
@@ -207,37 +217,37 @@ window.onload = () => {
 
 
         //Checking if there is already an enemy at the same position 
-        let enemyCheck = true;
+        // let enemyCheck = true;
 
-        if (enemies.length > 1) {
+        // // if (enemies.length > 1) {
             
-            for (let i = 0; i < enemies.length; i++) {
+        // //     for (let i = 0; i < enemies.length; i++) {
 
-                if (parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) < 50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) >= 0) {
-                    enemyCheck = false;
+        // //         if (parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) < 50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) >= 0) {
+        // //             enemyCheck = false;
                     
-                } else if ( parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) > -50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) <= 0) {
-                    enemyCheck = false;
+        // //         } else if ( parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) > -50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) <= 0) {
+        // //             enemyCheck = false;
                     
-                } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) < 60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) >= 0) {
-                    enemyCheck = false;
+        // //         } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) < 60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) >= 0) {
+        // //             enemyCheck = false;
                     
-                } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) > -60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) <= 0) {
-                    enemyCheck = false;
+        // //         } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) > -60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) <= 0) {
+        // //             enemyCheck = false;
                     
-                } else {
-                    enemyCheck = true;
-                }
-            }   
-        }
+        // //         } else {
+        // //             enemyCheck = true;
+        // //         }
+        // //     }   
+        // // }
 
-        if (enemyCheck === true) {
+        // if (enemyCheck === true) {
             enemies.push(newEnemy);
             document.getElementById('game-window').append(newEnemy)
 
-        } else {
-            newEnemy.remove()
-        }
+        // } else {
+        //     newEnemy.remove()
+        // }
 
     }
 
@@ -246,7 +256,7 @@ window.onload = () => {
         //console.log('moving enemies');
         for (let i = 0 ; i < enemies.length; i++ ) {
 
-            if (parseInt(enemies[i].style.top) >= 760) {
+            if (parseInt(enemies[i].style.top) >= gameWindow.offsetHeight - enemies[i].clientHeight/2) {
                 enemies[i].remove();
                 enemies.splice(i,1)
                 playerLife -= 1;
@@ -258,8 +268,9 @@ window.onload = () => {
                     enemies[i].remove();
                     enemies.splice(i,1);
                     playerLife -= 1;
-                    shooterTopPos = 740;
-                    shooterLeftPos = 370;
+                    shooterPlayer.style.top = gameWindow.clientHeight - 50 + 'px'
+                    shooterPlayer.style.left = (gameWindow.clientWidth)/2 + 'px'
+
                 } else {
                     enemies[i].style.top = parseInt(enemies[i].style.top) + enemyMovementSpeed + 'px';
                 }
@@ -277,15 +288,21 @@ window.onload = () => {
         for(let i = 0; i < enemies.length; i++) {
             for(let j = 0; j < bullets.length; j++) {
 
-                if((parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left)) <= 8 &&
-                    parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left) >= -60) {
+                if((parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left)) <= 60 &&
+                    parseInt(enemies[i].style.left) - parseInt(bullets[j].style.left) >= -20) {
 
                     if(parseInt(enemies[i].style.top) - parseInt(bullets[j].style.top) >= -50 ){
+                        
+                        let enemyKilledSound = document.getElementById('enemy-killed');
+                        enemyKilledSound.play();
+
                         enemies[i].remove();
                         bullets[j].remove();
                         enemies.splice(i,1);
                         bullets.splice(j,1);
-                        playerScore += 1;  
+                        playerScore += 1;
+                        
+                        document.getElementById('score').innerHTML = playerScore;
                     }
                 }
             }
@@ -328,6 +345,8 @@ window.onload = () => {
         enemyMovementSpeed = 1;
         bullets = [];
         enemies = [];
+        shooterPlayer.style.top = gameWindow.clientHeight - 50 + 'px';
+        shooterPlayer.style.left = (gameWindow.clientWidth)/2 + 'px';
 
 
     })
@@ -339,5 +358,6 @@ window.onload = () => {
 
 // Things to work on
 // Image for the Enemies when shot
-// Game end Criteria -- dies when one enemy goes thru instead of 3
-// Things go WAYYY faster when i reset and do again (not refresh browser)
+// Game end Criteria -- music when died
+// music and health for when enemy hits player
+// making sure enemy doesnt create at same positions. maybe use class with X and y to create enemy or array.

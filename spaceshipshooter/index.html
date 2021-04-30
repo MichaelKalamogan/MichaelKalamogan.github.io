@@ -6,25 +6,43 @@
         <link href="style.css" rel="stylesheet" />
         <title>Space Wars</title>
 
+        <audio id="bullet-sound">
+            <source src="sounds/laser-gun.mp3" type="audio/mp3">           
+        </audio>
+        <audio id="enemy-killed">
+            <source src="sounds/invaderkilled.wav" type="audio/wav">           
+        </audio>
+
     </head>
 
     <body>
-        <div id="gameplay">
-            <button class="game-button" id="start-game">Start</button>
-            <button class="game-button orange" id="easy">Easy</button>
-            <button class="game-button red" id="medium">Medium</button>
-            <button class="game-button green" id="hard">Hard</button>
-        </div>
-        
-        <div id="score-and-life">
-            <div>
-                <Span>Score:</Span>
-                <div id="score">0</div>
-
-            </div>
-        </div>
-        
         <div id="game-window">
+
+            <div id="headers">
+
+                <div id="gameplay">
+                    <div id ="difficulty-btn">
+                        <button class="game-button" id="start-game">Start</button>
+                        <button class="game-button orange" id="easy">Easy</button>
+                        <button class="game-button red" id="medium">Medium</button>
+                        <button class="game-button green" id="hard">Hard</button>
+                    </div>
+                </div>
+                
+                <div id="score-and-life">
+                    <div>
+                        <Span>Score:</Span>
+                        <div id="score">0</div>
+        
+                    </div>
+                </div>
+    
+                <div>
+                    
+                </div>
+    
+            </div>
+
             <div id="shooter">
                 <img src="spacecraft.png">
             </div>
