@@ -112,7 +112,33 @@ body{
   }
 
 #score-and-life {
-    margin-left: 60px;
+    background: white;
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    margin: 10px;
+    font-family: 'Carter One', sans-serif;
+}
+
+#level-up {
+  display: none;
+  color: black;
+  text-align: center;
+  background-color: white;
+  width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 30px;
+
+}
+
+#lives {
+  margin-left: 10px;
+}
+
+.life { 
+  height: 20px;
 }
 
 #shooter {
@@ -127,13 +153,13 @@ body{
     height: 100%
 }
 
-#bullet {
+.bullet {
     position: absolute;
     height: 20px;
     width: 20px;
 }
 
-#bullet img {
+.bullet img {
   width: 100%;
   height: 100%
 }
@@ -145,8 +171,8 @@ body{
 }
 
 #score {
-    text-align: center;
     text-decoration: underline;
+    margin: 0 5px;
 }
 
 #ending-msg {
@@ -161,6 +187,7 @@ body{
   align-items: center;
   color: white;
   font-size: 30px;
+  font-family: 'Carter One', sans-serif;
 }
 
 #ending-msg p {
@@ -169,3 +196,48 @@ body{
   font-weight: 900;
 }
 
+#score-storage {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+}
+
+form {
+  margin: 50px 50px 0px 50px;
+  text-align: center;
+
+}
+
+form h1 {
+  margin: 0;
+}
+
+#player-name {
+  margin: 10px;
+}
+#submit-btn {
+  margin-bottom: 50px;
+  width: fit-content;
+}
+
+#reset-btn {
+  font-size: large;
+  font-family: 'Carter One', sans-serif;
+}
+
+#hall-of-fame {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+}
+
+table, th, td {
+  border: 1px solid;
+  
+}
+
+@-webkit-keyframes blinking {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+  }

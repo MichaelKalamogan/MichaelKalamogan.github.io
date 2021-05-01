@@ -18,8 +18,20 @@
     <body>
         <div id="game-window">
 
-            <div id="headers">
+            <div id="score-and-life">
+                <Span>Score:</Span>
+                <div id="score"> 0</div> 
+                <div id ="lives">
+                    <Span>Lives Left:</Span>
+                    <img class="life" src="images/life.png">
+                    <img class="life" src="images/life.png">
+                    <img class="life" src="images/life.png">
+                </div>     
+            </div>
 
+            <p id="level-up"> Good Job. Moving to Next Stage</p>
+
+            <div id="headers">
                 <div id="gameplay">
                     <div id ="difficulty-btn">
                         <button class="game-button" id="start-game">Start</button>
@@ -27,20 +39,7 @@
                         <button class="game-button red" id="medium">Medium</button>
                         <button class="game-button green" id="hard">Hard</button>
                     </div>
-                </div>
-                
-                <div id="score-and-life">
-                    <div>
-                        <Span>Score:</Span>
-                        <div id="score">0</div>
-        
-                    </div>
-                </div>
-    
-                <div>
-                    
-                </div>
-    
+                </div>    
             </div>
 
             <div id="shooter">
@@ -49,9 +48,29 @@
         </div>
         
 
-        
-
         <div id="ending-msg">
+            <div id="score-storage">
+                <form>
+                    <h1>New Hi-Score!</h1>
+                    <label for="player-name">Name:</label>
+                    <input type="text" name="player-name" id="player-name" placeholder="anonymous">
+                    <button type="submit" id="submit-btn">Submit</button>
+                </form>
+                
+            </div>
+            <div id="hall-of-fame">
+                <h1>Hall Of Fame</h1>
+                <table id="score-table">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                </table>
+
+               
+            </div>
+
             <button id="reset-btn">New Game</button>
         </div>
             
