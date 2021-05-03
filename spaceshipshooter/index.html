@@ -9,9 +9,19 @@
         <audio id="bullet-sound">
             <source src="sounds/laser-gun.mp3" type="audio/mp3">           
         </audio>
+
         <audio id="enemy-killed">
             <source src="sounds/invaderkilled.wav" type="audio/wav">           
         </audio>
+
+        <audio id="game-over">
+            <source src="sounds/game-over.wav" type="audio/wav">           
+        </audio>
+
+        <audio id="power-up">
+            <source src="sounds/power-up.wav" type="audio/wav">           
+        </audio>
+
 
     </head>
 
@@ -49,24 +59,20 @@
         
 
         <div id="ending-msg">
+            <p>Game Over</p>
             <div id="score-storage">
                 <form>
                     <h1>New Hi-Score!</h1>
                     <label for="player-name">Name:</label>
                     <input type="text" name="player-name" id="player-name" placeholder="anonymous">
-                    <button type="submit" id="submit-btn">Submit</button>
+                    <button type="button" id="submit-btn">Submit</button>
                 </form>
                 
             </div>
             <div id="hall-of-fame">
                 <h1>Hall Of Fame</h1>
-                <table id="score-table">
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                    </tr>
-                </table>
+                <ol id="score-table">
+                </ol>
 
                
             </div>

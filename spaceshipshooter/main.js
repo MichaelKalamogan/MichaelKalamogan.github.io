@@ -4,11 +4,12 @@ window.onload = () => {
 
     //creating the game variables
     var playerLife = 3;
-    let enemyMovementSpeed = 1;
+    let enemyMovementSpeed = 2;
 
     var playerScore = 0;
-    let playerPointToAdd = 1
+    let playerPointToAdd = 1;
     let gameWindow = document.getElementById('game-window')
+    let hiScoreArray = [];
    
     //setting initial position of shooter
     let shooterPlayer = document.getElementById('shooter')
@@ -16,7 +17,7 @@ window.onload = () => {
     shooterPlayer.style.top = gameWindow.clientHeight - 50 + 'px'
     let shooterTopPos = parseInt(shooterPlayer.style.top)
   
-    shooterPlayer.style.left = (gameWindow.clientWidth)/2 + 'px'
+    shooterPlayer.style.left = (gameWindow.clientWidth)/2 -30 + 'px'
     let shooterLeftPos =  parseInt(shooterPlayer.style.left)
 
     //Creating arrays to hold the Bullets and Enemies tht will be created
@@ -30,7 +31,7 @@ window.onload = () => {
     let easyButton = document.getElementById('easy');
     let mediumButton = document.getElementById('medium');
     let hardButton = document.getElementById('hard');
-    let score = document.getElementById('score-and-life');
+    let scoreAndLife = document.getElementById('score-and-life');
 
     startButton.addEventListener('click', () => {
         startButton.style.display = 'none';
@@ -48,7 +49,7 @@ window.onload = () => {
         easyButton.style.display = 'none';
         mediumButton.style.display = 'none';
         hardButton.style.display = 'none';
-        score.style.display = 'flex';
+        scoreAndLife.style.display = 'flex';
 
         //starting game
         startGame();
@@ -59,11 +60,11 @@ window.onload = () => {
         easyButton.style.display = 'none'
         mediumButton.style.display = 'none'
         hardButton.style.display = 'none'
-        score.style.display = 'flex'
+        scoreAndLife.style.display = 'flex'
 
         //changing the enemy's speed
-        enemyMovementSpeed = 2;
-        playerPointToAdd = 2
+        enemyMovementSpeed = 3;
+        playerPointToAdd = 2;
 
         //start the game
         startGame();
@@ -73,10 +74,10 @@ window.onload = () => {
         easyButton.style.display = 'none';
         mediumButton.style.display = 'none';
         hardButton.style.display = 'none';
-        score.style.display = 'flex';
+        scoreAndLife.style.display = 'flex';
 
         //changing the enemy's speed
-        enemyMovementSpeed = 3;
+        enemyMovementSpeed = 4;
         playerPointToAdd = 3;
 
         //starting the game
@@ -91,8 +92,8 @@ window.onload = () => {
         //making everything move once player chooses the level
         let enemyCreation = setInterval(createEnemy, 1500);
         let clearEnemies = setInterval(killEnemy, 200)
-                
-//        console.log(enemyMove)
+        shooterPlayer.style.top = gameWindow.clientHeight - 50 + 'px';
+        shooterPlayer.style.left = (gameWindow.clientWidth)/2 -30 + 'px';
 
         let livesLeft = setInterval ( () => {
             let shooterMove = requestAnimationFrame(move);
@@ -101,6 +102,7 @@ window.onload = () => {
 
             if (playerLife <= 0) {
                 endGame();
+                document.getElementById('game-over').play();
                 cancelAnimationFrame(shooterMove);
                 cancelAnimationFrame(bulletMove);
                 cancelAnimationFrame(enemyMove);
@@ -144,10 +146,7 @@ window.onload = () => {
             shooterPlayer.style.left = shooterLeftPos + 'px';
  
         } 
-    }
-
-    
-
+    }  
 
 /*---------------------------------------------------------------------------------------------*/
     //Creating the bullets and moving them
@@ -167,9 +166,7 @@ window.onload = () => {
             bullet.appendChild(bulletImage);            
 
             let bulletSound = document.getElementById('bullet-sound')
-            bulletSound.play();
-           
-      
+            bulletSound.play();      
             
             bullets.push(bullet);
             document.getElementById('game-window').append(bullet);
@@ -182,7 +179,7 @@ window.onload = () => {
                 bullets.splice(i,1);
 
             } else {
-               bullets[i].style.top = parseInt(bullets[i].style.top) - 2 + 'px';
+               bullets[i].style.top = parseInt(bullets[i].style.top) - 5 + 'px';
             }
         }
     }
@@ -200,7 +197,7 @@ window.onload = () => {
        
 
         //Creating the enemy to appear randomly and ensuring it stays within the window
-        newEnemy.style.top = Math.floor(Math.random() * (gameWindow.clientHeight/ 3)) + 'px';
+        newEnemy.style.top = 10 + 'px';
         newEnemy.style.left = Math.random() * (gameWindow.clientWidth - 65) + 'px';
 
         let newEnemyTopPosition = newEnemy.style.top;
@@ -213,14 +210,8 @@ window.onload = () => {
         if (enemies.length > 1) {
             
             for (let i = 0; i < enemies.length; i++) {
-
-                if (parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) < 50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) >= 0) {
-                    enemyCheck = false;
                     
-                } else if ( parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) > -50 && parseInt(enemies[i].style.top) - parseInt(newEnemyTopPosition) <= 0) {
-                    enemyCheck = false;
-                    
-                } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) < 60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) >= 0) {
+                if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) < 60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) >= 0) {
                     enemyCheck = false;
                     
                 } else if ( parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) > -60 && parseInt(enemies[i].style.left) - parseInt(newEnemyLeftPosition) <= 0) {
@@ -244,10 +235,13 @@ window.onload = () => {
         //levelling Up
         let levelUp = document.getElementById ('level-up')
 
-        if (playerScore  > 0 && playerScore % 20 === 0) {
-            
+        if (playerScore > 0 && playerScore % 18 === 0) {
+
+
+            playerPointToAdd += 1;
             levelUp.style.display = 'block';
             fadeout();
+            document.getElementById('power-up').play();
 
             function fadeout() {
                  
@@ -266,7 +260,7 @@ window.onload = () => {
                         clearInterval(fadeOut);
                     }
                       
-                }, 200);
+                }, 500);
             }
 
             setTimeout( function () {
@@ -351,41 +345,126 @@ window.onload = () => {
 
         function endGame() {
 
-            let notification = document.createElement('p');
-            notification.innerText = 'Game Over';
-            document.getElementById('ending-msg').prepend(notification);
             document.getElementById('ending-msg').style.display = 'flex';
             document.getElementById('ending-msg').style.flexDirection = 'column';
-            document.getElementById('hall-of-fame').style.display='flex';
-
+            
+            
             if(localStorage.length < 10) {
-                
                 document.getElementById('score-storage').style.display = 'flex';
-                let submitbutton = document.getElementById('submit-btn');
-                let playerName = document.getElementById('player-name');
-                
-                submitbutton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    //adding the high score to localstorage
-                    const name = playerName.value;
-                    localStorage.setItem(playerScore, name);
 
-                    document.getElementById('score-storage').style.display ='none';
+                let submitButton = document.getElementById('submit-btn');
+                
+                submitButton.onclick = function () {
+
+                    let playerName = document.getElementById('player-name').value;
+                    localStorage.setItem(playerName, playerScore)
+            
+                    for(let i = 0; i < localStorage.length; i++) {
+                        let legend = localStorage.key(i)
+                        let legendScore = parseInt(localStorage.getItem(localStorage.key(i)))
+            
+                        hiScoreArray.push({Name: legend, Score: legendScore });
+                    }
+            
+                    // show the hi score table once name has been submitted
+                    showHiScoreArray();
+            
+                    //show hall of fame
+                    document.getElementById('hall-of-fame').style.display = 'flex'; 
+                    document.getElementById('score-storage').style.display = 'none';
+                }
+
+            } else {
+
+                for(let i = 0; i < localStorage.length; i++) {
+                    let legend = localStorage.key(i)
+                    let legendScore = parseInt(localStorage.getItem(localStorage.key(i)))
+        
+                    hiScoreArray.push({Name: legend, Score: legendScore });
+                }
+
+                hiScoreArray.sort( (a,b) => {
+                    return b.Score - a.Score
+                })
+
+                if(playerScore > hiScoreArray[9].Score) {
+
+                    // Getting the new Hi- Scorer's name
+                    document.getElementById('score-storage').style.display = 'flex';
+
+                    let submitButton = document.getElementById('submit-btn');
+                
+                    submitButton.onclick = function () {
+
+                        let playerName = document.getElementById('player-name').value;
+                        localStorage.setItem(playerName, playerScore);
+
+                        hiScoreArray = [];
+
+                        for(let i = 0; i < localStorage.length; i++) {
+                            let legend = localStorage.key(i)
+                            let legendScore = parseInt(localStorage.getItem(localStorage.key(i)))
+                
+                            hiScoreArray.push({Name: legend, Score: legendScore });
+                        }
+                
+                        // show the hi score table once name has been submitted
+                        showHiScoreArray();
+                
+                        //show hall of fame
+                        document.getElementById('hall-of-fame').style.display = 'flex';
+                        document.getElementById('score-storage').style.display = 'none';
+                    } 
+
+                } else {
+
+                    hiScoreArray = [];
+
+                    for(let i = 0; i < localStorage.length; i++) {
+                        let legend = localStorage.key(i)
+                        let legendScore = parseInt(localStorage.getItem(localStorage.key(i)))
+            
+                        hiScoreArray.push({Name: legend, Score: legendScore });
+                    }
+            
+                    // show the hi score table once name has been submitted
+                    showHiScoreArray();
+            
+                    //show hall of fame
+                    document.getElementById('hall-of-fame').style.display = 'flex';
+                }
+            }        
+        }
+
+
+    //sort the Hi-Score array according to score and displaying the array
+    function showHiScoreArray() {
+
+        hiScoreArray.sort( (a,b) => {
+            return parseInt(b.Score) - parseInt(a.Score)
+        })
+
+        for (let j = 0; j < 10; j++) {
+            if (hiScoreArray[j] !== null) {
+                let newList = document.createElement('li')
+                newList.innerText = `${hiScoreArray[j].Name} : ${hiScoreArray[j].Score}`;
     
-                 })
+                document.getElementById('score-table').append(newList);
             }
 
-          
         }
-    
+    }
+
+
     // To reset Game
     let reset = document.getElementById('reset-btn');
 
     reset.addEventListener('click', () => {
 
         let endingMsg = document.querySelector('#ending-msg');
-        endingMsg.querySelector('p').remove();
         endingMsg.style.display = 'none';
+        document.getElementById('score-storage').style.display = 'none';
+        document.getElementById('hall-of-fame').style.display ='none';
 
         //removing the residual bullets
         let allBullets = document.querySelectorAll('.bullet');
@@ -401,14 +480,19 @@ window.onload = () => {
 
         // Amending to look like at the start
         startButton.style.display = 'flex';
-        score.style.display = 'none';
+        scoreAndLife.style.display = 'none';
         playerLife = 3;
         enemyMovementSpeed = 1;
         playerPointToAdd = 1;
+        hiScoreArray = [];
         
         //reset score
         playerScore = 0;
-        document.getElementById('score').innerHTML = playerScore;
+
+        //reset the Hall of fame screen
+        document.getElementById('score').innerHTML = 0;
+        document.getElementById('score-table').innerHTML = "";
+        document.getElementById('submit-btn').removeAttribute('onclick');
 
         //reset enemy and bullets' arrays
         bullets = [];
@@ -435,4 +519,4 @@ window.onload = () => {
 // Image for the Enemies when shot
 // Game end Criteria -- music when died
 // music for when enemy hits player
-//figure out how to prevent main game screen from moving
+// figure out how to prevent main game screen from moving
