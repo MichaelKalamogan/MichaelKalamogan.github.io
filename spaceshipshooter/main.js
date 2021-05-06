@@ -198,7 +198,7 @@ window.onload = () => {
 
         //Creating the enemy to appear randomly and ensuring it stays within the window
         newEnemy.style.top = 10 + 'px';
-        newEnemy.style.left = Math.random() * (gameWindow.clientWidth - 65) + 'px';
+        newEnemy.style.left = Math.random() * (0.6*gameWindow.clientWidth) + 200 + 'px';
 
         let newEnemyTopPosition = newEnemy.style.top;
         let newEnemyLeftPosition = newEnemy.style.left;
