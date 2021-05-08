@@ -348,7 +348,7 @@ window.onload = () => {
             document.getElementById('ending-msg').style.display = 'flex';
             document.getElementById('ending-msg').style.flexDirection = 'column';
             
-            
+            // Hi-Score table input
             if(localStorage.length < 10) {
                 document.getElementById('score-storage').style.display = 'flex';
 
@@ -356,7 +356,20 @@ window.onload = () => {
                 
                 submitButton.onclick = function () {
 
-                    let playerName = document.getElementById('player-name').value;
+                    let playerName = document.getElementById('player-name').value ;
+
+                    // In case there is a duplicate name already in the localStorage
+                    if(typeof(localStorage.getItem("username")) !=='undefined') {
+                        playerName += ' 2';
+                    }
+
+                    // In case there is a duplicate name of the duplicate name in the localStorage
+                    for (let i = 0; i < localStorage.length; i++) {    
+                        if(localStorage.key(i) === playerName) {
+                            playerName +=  ' 2';
+                        }
+                    }
+                    
                     localStorage.setItem(playerName, playerScore)
             
                     for(let i = 0; i < localStorage.length; i++) {
