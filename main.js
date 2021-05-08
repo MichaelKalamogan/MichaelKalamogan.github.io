@@ -444,13 +444,12 @@ window.onload = () => {
             return parseInt(b.Score) - parseInt(a.Score)
         })
 
-        for (let j = 0; j < 10; j++) {
-            if (hiScoreArray[j] !== null) {
-                let newList = document.createElement('li')
-                newList.innerText = `${hiScoreArray[j].Name} : ${hiScoreArray[j].Score}`;
+        for (let j = 0; j < hiScoreArray.length; j++) {
+        
+            let newList = document.createElement('li')
+            newList.innerText = `${hiScoreArray[j].Name} : ${hiScoreArray[j].Score}`;
     
-                document.getElementById('score-table').append(newList);
-            }
+            document.getElementById('score-table').append(newList);
 
         }
     }
@@ -518,5 +517,5 @@ window.onload = () => {
 // Things to work on
 // Image for the Enemies when shot
 // Game end Criteria -- music when died
-// music for when enemy hits player
-// figure out how to prevent main game screen from moving
+
+
