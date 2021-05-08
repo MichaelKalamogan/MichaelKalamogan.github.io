@@ -528,7 +528,6 @@ window.onload = () => {
 
 
 // Things to work on
-// Image for the Enemies when shot
-// Game end Criteria -- music when died
+// Image for the Enemies when shot. Never Complete
 
 
