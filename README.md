@@ -14,7 +14,7 @@ You have 3 lives. You lose a live everytime one enemy escapes or one enemy hits 
 
 #**Sources:**
 
-The game start and easy/medium/hard buttons was copied from: [https://codepen.io/3mil1/pen/eYYQbwb
+The game start and easy/medium/hard buttons were refenced from: https://codepen.io/3mil1/pen/eYYQbwb
 
 
-The game music was from [https://freesound.org/browse/tags/game-sound/]
+The game music was from https://freesound.org/browse/tags/game-sound/
